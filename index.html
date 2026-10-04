@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadeau de la Vie — Black Robin & Lady Marianne</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
+  
+</head>
+<body>
+  <!-- Écran d'entrée secret -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-card">
+      <h1>Cadeau de la Vie</h1>
+      <p class="subtitle">Black Robin & Lady Marianne</p>
+      <div class="login-form">
+        <input type="password" id="secret-code" placeholder="Code secret..." autocomplete="off">
+        <button id="enter-btn">Entrer 💚💜</button>
+        <p id="login-error" class="error hidden">Code incorrect</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Site principal -->
+  <div id="main-app" class="main-app hidden">
+    <!-- Bandeau aquarelle animé -->
+    <header class="banner">
+      <div class="banner-track" id="banner-track"></div>
+    </header>
+
+    <!-- Navigation principale -->
+    <nav class="main-nav">
+      <button class="nav-btn active" data-page="moments">Moments</button>
+      <button class="nav-btn" data-page="histoire">Notre Histoire</button>
+      <button class="nav-btn" data-page="heritage">Héritage</button>
+    </nav>
+
+    <!-- ========== PAGE MOMENTS ========== -->
+    <div id="page-moments" class="page">
+      <nav class="filters">
+        <button class="filter-btn active" data-filter="all">Tout</button>
+        <button class="filter-btn" data-filter="Robin">Robin Serge 💚🇧🇪</button>
+        <button class="filter-btn" data-filter="Lady">Lady Marianne 💜🇫🇷</button>
+        <button class="filter-btn" data-filter="Nous">Nous deux</button>
+        <button class="filter-btn" data-filter="media">Médias</button>
+      </nav>
+
+      <main class="content">
+        <!-- Surprise anniversaire (29 octobre) -->
+        <section id="birthday-surprise" class="birthday-surprise hidden">
+          <div class="birthday-card">
+            <div class="birthday-stars">✨ 🧚‍♀️ ✨</div>
+            <h2>Joyeux anniversaire, ma Lady Marianne</h2>
+            <p class="birthday-from">de ton Black Robin espiègle 🖤🐦</p>
+            <p class="birthday-message">
+              À la fée de Clermont-Ferrand,<br>
+              celle qui tricote les jours et illumine la forêt.<br><br>
+              Ce jardin secret est pour toi, pour nous,<br>
+              pour toujours.
+            </p>
+            <p class="birthday-names">Serge 💚 & Marianne 💜</p>
+            <div class="birthday-date">29 octobre — chaque année, en souvenir</div>
+          </div>
+        </section>
+
+        <!-- Formulaire d'ajout -->
+        <section class="add-section">
+          <h2>Ajouter un moment</h2>
+          <form id="add-form">
+            <div class="form-row">
+              <label>Auteur *</label>
+              <select id="author" required>
+                <option value="">— Choisir —</option>
+                <option value="Robin">Robin Serge 💚🇧🇪</option>
+                <option value="Lady">Lady Marianne 💜🇫🇷</option>
+                <option value="Nous">Nous deux</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>Texte / Citation (tu peux coller un lien YouTube)</label>
+              <textarea id="text-content" rows="3" placeholder="Écris ici... ou colle un lien YouTube"></textarea>
+            </div>
+            <div class="form-row">
+              <label>Petite image (max 1,2 Mo) — optionnel</label>
+              <input type="file" id="media-file" accept="image/*">
+              <div id="media-preview" class="media-preview hidden"></div>
+            </div>
+            <div class="form-row">
+              <label>Ou colle un lien (image, vidéo, PDF, YouTube…)</label>
+              <input type="url" id="media-url" placeholder="https://...">
+            </div>
+            <button type="submit" id="submit-btn">Publier ✨</button>
+          </form>
+        </section>
+
+        <section class="gallery" id="gallery">
+          <p class="loading">Chargement des souvenirs...</p>
+        </section>
+      </main>
+    </div>
+
+    <!-- ========== PAGE NOTRE HISTOIRE (Genèse) ========== -->
+    <div id="page-histoire" class="page hidden">
+      <main class="content">
+        <section class="histoire-intro">
+          <h1 class="histoire-title">Notre Histoire</h1>
+          <p class="histoire-subtitle">Comme une Genèse — le récit de notre rencontre et de tout ce qui a suivi</p>
+          <div class="slowly-box">
+            <p>Nous nous sommes rencontrés sur <strong>Slowly</strong></p>
+            <p class="slowly-note">Ajoutez ici une capture d’écran de l’application dans un chapitre ci-dessous</p>
+          </div>
+        </section>
+
+        <section class="add-section">
+          <h2>Ajouter un chapitre</h2>
+          <form id="histoire-form">
+            <div class="form-row">
+              <label>Titre du chapitre *</label>
+              <input type="text" id="chapitre-titre" placeholder="Ex : La rencontre sur Slowly" required>
+            </div>
+            <div class="form-row">
+              <label>Auteur *</label>
+              <select id="histoire-author" required>
+                <option value="">— Choisir —</option>
+                <option value="Robin">Robin Serge 💚🇧🇪</option>
+                <option value="Lady">Lady Marianne 💜🇫🇷</option>
+                <option value="Nous">Nous deux</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>Le récit (tu peux coller un lien YouTube)</label>
+              <textarea id="histoire-text" rows="6" placeholder="Racontez..."></textarea>
+            </div>
+            <div class="form-row">
+              <label>Petite image (max 1,2 Mo) — optionnel</label>
+              <input type="file" id="histoire-media" accept="image/*">
+              <div id="histoire-preview" class="media-preview hidden"></div>
+            </div>
+            <div class="form-row">
+              <label>Ou colle un lien (image, vidéo, PDF, YouTube…)</label>
+              <input type="url" id="histoire-url" placeholder="https://...">
+            </div>
+            <button type="submit" id="histoire-submit">Publier le chapitre ✨</button>
+          </form>
+        </section>
+
+        <section class="chapitres" id="chapitres">
+          <p class="loading">Chargement de notre histoire...</p>
+        </section>
+      </main>
+    </div>
+
+    <!-- ========== PAGE HÉRITAGE ========== -->
+    <div id="page-heritage" class="page hidden">
+      <main class="content">
+        <section class="heritage-section">
+          <h1 class="histoire-title">Héritage</h1>
+          <p class="heritage-intro">
+            Pour le jour où nous ne serons plus de ce monde.<br>
+            Celui ou celle qui aura le code secret pourra récupérer ici tout ce que nous avons partagé —
+            nos moments, notre histoire, nos images, nos vidéos et nos documents —
+            afin de raconter une rencontre incroyable.
+          </p>
+
+          <div class="heritage-actions">
+            <button id="btn-print" class="heritage-btn">Imprimer / Sauver en PDF</button>
+            <button id="btn-export-text" class="heritage-btn secondary">Télécharger les textes (fichier .txt)</button>
+          </div>
+
+          <div id="heritage-preview" class="heritage-preview">
+            <p class="loading">Préparation de l’archive...</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <footer class="footer">
+      <p>Cadeau de la Vie — Black Robin & Lady Marianne — Privé pour toujours 💚💜</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
